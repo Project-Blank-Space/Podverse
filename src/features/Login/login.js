@@ -14,7 +14,7 @@ const Login = () => {
             {/* Login Box */}
             <div className='flex justify-center w-full'>
                 <div className="p-2 drop-shadow-2xl shadow-blue-400 shadow-2xl rounded-md ">
-                    <div className="flex flex-col justify-center h-full gap-4 items-center text-navblue rounded-md bg-white px-8 lg:px-16 py-4">
+                    <div className="flex flex-col justify-center h-full gap-4 items-center text-navblue rounded-md bg-white border-8 border-golden px-8 lg:px-16 py-4">
                         <span className="text-xl font-bold">LOGIN IN WITH</span>
                         <div className='rounded-md bg-white p-2 drop-shadow-md'>
                             <img src={Google} alt='google' />
