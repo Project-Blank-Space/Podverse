@@ -52,7 +52,7 @@ const NavBar = () => {
                 <NavLink
                   key={index}
                   to={routeItem.to}
-                  className={`flex px-2 items-center font-semibold text-base whitespace-nowrap ${activeLink === routeItem.to ? 'text-golden' : 'text-[#FFFFFF]'
+                  className={`flex px-2 items-center font-semibold text-base whitespace-nowrap hover:border-b-2 border-golden ${activeLink === routeItem.to ? 'text-golden' : 'text-[#FFFFFF]'
                     }`}
                   exact
                 >
@@ -70,7 +70,7 @@ const NavBar = () => {
                 <NavLink
                   key={index}
                   to={routeItem.to}
-                  className={`flex gap-4 px-2 items-center font-semibold text-base whitespace-nowrap ${activeLink === routeItem.to ? 'text-[#1F3D53] bg-white' : 'text-[#FFFFFF]'
+                  className={`flex gap-4 px-2 py-1 items-center font-semibold text-base whitespace-nowrap ${activeLink === routeItem.to ? 'text-[#1F3D53] bg-white rounded-md' : 'text-[#FFFFFF]'
                     }`}
                   exact
                 >
