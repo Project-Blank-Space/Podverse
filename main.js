@@ -59,7 +59,7 @@ image_input.addEventListener("change", function() {
 
 
 async function api_call(){
-    const api_response = await fetch(`http://127.0.0.1:5000/upload`,
+    const api_response = await fetch(`http://127.0.0.1:5000/check_channel/username`,
      { method: 'POST', 
      body: JSON.stringify(body), 
      headers: { 'Content-Type': 'application/json'}})

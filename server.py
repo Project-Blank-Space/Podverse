@@ -1,4 +1,4 @@
-from flask import Flask,request
+from flask import Flask,request,jsonify
 import base64
 import json
 
@@ -25,7 +25,7 @@ def create_user(username):
         
         user_img_url = functions.user_image_upload(new_user_data["user_img"], username)
         
-        with open('.database/user_database.json', "r") as x:
+        with open('database/user_database.json', "r") as x:
             user_database = json.load(x)
         
         user_database['username'] = {
@@ -35,12 +35,12 @@ def create_user(username):
         "user_email" : new_user_data["user_email"],
         "user_description" : new_user_data["user_description"],
         } 
-        with open('.database/user_database.json', "w") as y:
+        with open('database/user_database.json', "w") as y:
             json.dump(user_database, y)
         
         functions.user_database_upload()
         
-        return "User Successfully Created"
+        return jsonify({'user_created': 'True'})
 
 
 @app.route('/<username>/create_channel', methods=['POST'])
@@ -50,7 +50,7 @@ def create(username):
         
         channel_image_url = functions.channel_image_upload(new_channel_data["channel_image"], username)
         
-        with open('.database/channel_database.json', "r") as x:
+        with open('database/channel_database.json', "r") as x:
             channel_database = json.load(x)
             
         channel_database['username'] = {
@@ -59,23 +59,23 @@ def create(username):
         "channel_description" : new_channel_data["channel_description"]
         }
         
-        with open('.database/channel_database.json', "w") as y:
+        with open('database/channel_database.json', "w") as y:
             json.dump(channel_database, y)
             
         functions.channel_database_upload()  # uploads the channel to the database.
         
-        return "Channel Successfully Created"
+        return jsonify({'channel_created': 'True'})
 
-@app.route('/check_channel/<username>')
+@app.route('/check_channel/<username>', methods=['GET'])
 def check_channel(username):
-    
-    with open('.database/channel_database.json', "r") as x:
-        channel_database = json.load(x)
-        
-    if username in list(channel_database.keys()):
-        return True
-    else:
-        return False   
+    if request.method == 'GET':  # if the user is looking for a channel, then it will check if the username is in the database. If it is, then it will return true, else it will return false.
+        with open('database/channel_database.json', "r") as x:
+            channel_database = json.load(x)
+            
+        if username in list(channel_database.keys()):
+            return jsonify({'channel_exists': 'True'})
+        else:
+            return jsonify({'channel_exists': 'False'})   
 
 
 
@@ -88,9 +88,9 @@ def check_channel(username):
 
 
 
-@app.route('/<username>/home')
-def user_home(username):
-    return 0
+# @app.route('/<username>/home')
+# def user_home(username):
+#     return 0
 
  
     
@@ -99,32 +99,32 @@ def user_home(username):
     
 
 
-@app.route('/<channel_name>/upload', methods=['POST'])
-def upload(channel_name):
-    if request.method == 'POST':
+# @app.route('/<channel_name>/upload', methods=['POST'])
+# def upload(channel_name):
+#     if request.method == 'POST':
         
-        img_base64 = request.get_json()
+#         img_base64 = request.get_json()
         
-        decode = open('IMAGE.png', 'wb')
-        decode.write(base64.b64decode(img_base64['png']))
+#         decode = open('IMAGE.png', 'wb')
+#         decode.write(base64.b64decode(img_base64['png']))
         
-        # file_base64 = request.get_json()
+#         # file_base64 = request.get_json()
         
-        # print(file_base64)
+#         # print(file_base64)
         
-        # encoded_file = 'data:application/pdf;base64,' + file_base64['png']
-        # print(file_base64)
+#         # encoded_file = 'data:application/pdf;base64,' + file_base64['png']
+#         # print(file_base64)
         
-        # encoded_file_utf = encoded_file.encode('utf-8')
-        # print(encoded_file_utf)            # encoded_file_utf is now a bytes-object with the encoded data. Use bytes.decode()
+#         # encoded_file_utf = encoded_file.encode('utf-8')
+#         # print(encoded_file_utf)            # encoded_file_utf is now a bytes-object with the encoded data. Use bytes.decode()
         
-        # file = base64.b64decode(file_base64['png']) # encoded_file_utf is now a bytes-object with the encoded data. Use bytes.decode()
-        s3.upload_file(
-            Filename="IMAGE.png",
-            Bucket=bucket,
-            Key="new.jpg",
-        )
-        return 0   
+#         # file = base64.b64decode(file_base64['png']) # encoded_file_utf is now a bytes-object with the encoded data. Use bytes.decode()
+#         s3.upload_file(
+#             Filename="IMAGE.png",
+#             Bucket=bucket,
+#             Key="new.jpg",
+#         )
+#         return 0   
         
         
         
