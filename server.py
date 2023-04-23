@@ -85,11 +85,13 @@ def upload_file(username, channel_name):
         
         podcast_data_url = functions.podcast_data_upload(uploaded_data["file"], username, channel_name, episode_no)
             
-        episode_database[channel_name][episode_no] = {
-            "episode_url" : podcast_data_url,
-            "episode_title" : uploaded_data["episode_name"],
-            "episode_description" : uploaded_data["episode_description"],
-            "episode_time" : str(functions.data_time("PODCAST_DATA.mp3"))
+        episode_database[channel_name] = {
+            episode_no : {
+                "episode_url" : podcast_data_url,
+                "episode_title" : uploaded_data["episode_name"],
+                "episode_description" : uploaded_data["episode_description"],
+                "episode_time" : str(functions.data_time("PODCAST_DATA.mp3"))
+            }
         }
         
         with open('database/episode_database.json', "w") as y:
@@ -118,21 +120,21 @@ def get_user_data(username):
             
         return jsonify({username :user_database[username]})
 
-@app.route('/mark_favourite/<username>/<channel_name>/<episode_no>', methods=['POST'])
-def mark_favourite(username, channel_name, episode_no):
+@app.route('/mark_favourite/<username>/<not_user_channel_name>/<episode_no>', methods=['POST'])
+def mark_favourite(username, not_user_channel_name, episode_no):
     if request.method == 'POST':
         with open('database/favourite_database.json', "r") as x:
             favourite_database = json.load(x)
         
         try:
-            current_saved_data = favourite_database[username][channel_name]
+            current_saved_data = favourite_database[username][not_user_channel_name]
             
             if episode_no in current_saved_data:
-                favourite_database[username][channel_name].remove(episode_no)
+                favourite_database[username][not_user_channel_name].remove(episode_no)
             else:
-                favourite_database[username][channel_name].append(episode_no) # append the number of the current season and append the current season number.
+                favourite_database[username][not_user_channel_name].append(episode_no) # append the number of the current season and append the current season number.
         except KeyError:
-            favourite_database[username] = {channel_name : [episode_no]}
+            favourite_database[username] = {not_user_channel_name : [episode_no]}
 
         with open('database/favourite_database.json', "w") as y:
             json.dump(favourite_database, y)
