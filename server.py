@@ -36,7 +36,7 @@ def create_user(username):
         
         functions.user_database_upload()
         
-        return jsonify({'user_created': 'True'})
+        return jsonify({'user_created': True})
 
 
 @app.route('/<username>/create_channel', methods=['POST'])
@@ -60,7 +60,7 @@ def create(username):
             
         functions.channel_database_upload()  # uploads the channel to the database.
         
-        return jsonify({'channel_created': 'True'})
+        return jsonify({'channel_created': True})
 
 @app.route('/check_channel/<username>', methods=['GET'])
 def check_channel(username):
@@ -69,9 +69,9 @@ def check_channel(username):
             channel_database = json.load(x)
             
         if username in list(channel_database.keys()):
-            return jsonify({'channel_exists': 'True'})
+            return jsonify({'channel_exists': True})
         else:
-            return jsonify({'channel_exists': 'False'})   
+            return jsonify({'channel_exists': False})   
 
 @app.route('/<username>/<channel_name>/upload', methods=['POST'])
 def upload_file(username, channel_name):
@@ -97,7 +97,7 @@ def upload_file(username, channel_name):
             
         functions.episode_database_upload()    # upload the database of the channel.
         
-        return jsonify({'episode_uploaded': 'True'})
+        return jsonify({'episode_uploaded': True})
     
 @app.route('/check_user/<username>', methods=['GET'])
 def check_user(username):
@@ -118,7 +118,7 @@ def get_user_data(username):
             
         return jsonify({username :user_database[username]})
 
-@app.route('/<username>/mark_favourite/<channel_name>/<episode_no>', methods=['POST'])
+@app.route('/<username>/mark_favourite/<channel_name>/int<episode_no>', methods=['POST'])
 def mark_favourite(username, channel_name, episode_no):
     if request.method == 'POST':
         with open('database/favourite_database.json', "r") as x:
@@ -131,7 +131,7 @@ def mark_favourite(username, channel_name, episode_no):
             
         functions.favourite_database_upload()
         
-        return jsonify({'favourite_added': 'True'})
+        return jsonify({'favourite_added': True})
 
 
 
