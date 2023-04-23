@@ -71,7 +71,15 @@ def check_channel(username):
         if username in list(channel_database.keys()):
             return jsonify({'channel_exists': True})
         else:
-            return jsonify({'channel_exists': False})   
+            return jsonify({'channel_exists': False})
+        
+@app.route('/get_channel/<username>', methods=['GET'])
+def get_channel_data(username):
+    if request.method == 'GET':
+        with open('database/channel_database.json', "r") as x:
+            channel_database = json.load(x)            # read the channel database.
+        
+        return jsonify({username : channel_database[username]})  
 
 @app.route('/<username>/<channel_name>/upload', methods=['POST'])
 def upload_file(username, channel_name):
