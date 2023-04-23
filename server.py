@@ -103,8 +103,20 @@ def upload_file(username, channel_name):
         
         return jsonify({'episode_uploaded': 'True'})
     
+@app.route('/check_user/<username>', methods=['GET'])
+def check_user(username):
+    if request.method == 'GET':
+        with open('database/user_database.json', "r") as x:
+            user_database = json.load(x)
+            
+        if username in list(user_database.keys()):
+            return jsonify({'user_exists': 'True'})
+        else:
+            return jsonify({'user_exists': 'False'})
 
-
+# @app.route('get_data/<username>', methods=['GET'])
+# def check_user(username):
+#     if
 
 
 
