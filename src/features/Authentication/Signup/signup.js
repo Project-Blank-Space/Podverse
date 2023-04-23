@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useGoogleLogin, googleLogout } from '@react-oauth/google';
 import axios from 'axios';
-import Google from '../../assets/Google.svg'
-import signup from '../../assets/signup.svg'
+import Google from '../../../assets/Google.svg'
+import signup from '../../../assets/signup.svg'
 import { useNavigate } from 'react-router-dom';
-import useSignup from './hooks/useSignup';
-import { toast } from "react-toastify";
+import { LocalStorageItems } from '../../../shared/localstorageitems';
 
 
 const Signup = () => {
@@ -13,7 +12,7 @@ const Signup = () => {
     const [user, setUser] = useState([]);
     const [profile, setProfile] = useState([]);
 
-    const baseUrl = "https://localhost:5000";
+    const baseUrl = "http://127.0.0.1:5000";
 
     const maindatalink = async (loginBody) => {
         const loginUrl = `${baseUrl}/create_user/${profile.id}`;
@@ -22,12 +21,34 @@ const Signup = () => {
             const response = await axios.post(loginUrl, loginBody, {
                 headers: headers,
             });
-            console.log(response.data.status)
-            return response.data.status;
+            console.log(response.status)
+            if (response.status) {
+                localStorage.setItem(LocalStorageItems.user_id, JSON.stringify(profile.id));
+            } else {
+                console.log("error")
+            }
+            return response.status;
         } catch (e) {
             throw new Error(e);
         }
     };
+
+
+    const checkData = async (data) => {
+        const url = `${baseUrl}/check_user/${data.id}`;
+        const headers = { "content-type": "application/json" };
+        try {
+            const response = await axios.get(url, {
+                headers: headers,
+            });
+            console.log(response.data.user_exists);
+            // window.alert(response.data.user_name)
+            return response.data.user_exists;
+        } catch (e) {
+            throw new Error(e);
+        }
+    };
+
 
 
     const senddata = async (data) => {
@@ -39,21 +60,10 @@ const Signup = () => {
                 user_email: data.email,
                 user_description: data.verified_email,
             };
-            const authResponse = await maindatalink(payload);
-
-            if (authResponse) {
-                toast("OTP Sent Successfully", {
-                    type: toast.TYPE.INFO,
-                    autoClose: 5000,
-                });
-            } else {
-                toast("Bad Credentials", {
-                    type: toast.TYPE.ERROR,
-                    autoClose: 3000,
-                });
-            }
+            console.log(payload)
+            await maindatalink(payload);
         } catch (e) {
-            toast(e, { type: toast.TYPE.ERROR, autoClose: 3000 });
+            console.log(e)
         }
     };
 
@@ -68,20 +78,46 @@ const Signup = () => {
         onSuccess: (codeResponse) => {
             console.log(codeResponse)
             setUser(codeResponse);
-            if (user) {
-                axios
-                    .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+            try {
+                if (user) {
+                    axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
                         headers: {
                             Authorization: `Bearer ${user.access_token}`,
                             Accept: 'application/json'
                         }
                     })
-                    .then((res) => {
-                        setProfile(res.data);
-                        console.log(profile);
-                        senddata(profile);
-                    })
-                    .catch((err) => console.log(err));
+                        .then((res) => {
+                            checkData(res.data).then((check) => {
+                                console.log(check);
+                                if (check == true) {
+                                    navigate('/dashboard')
+                                }
+                                else {
+                                    setProfile(res.data);
+                                    console.log(profile);
+                                    senddata(profile);
+                                }
+                            });
+                        })
+                        .catch((error) => {
+
+                            if (error.response.status === 409) {
+                                window.alert("An account with that email or username already exists.");
+                            } else {
+                                window.alert("An unknown error occurred. Please try again later.");
+                            }
+
+                        });
+                }
+            }
+            catch (error) {
+
+                if (error.response.status === 409) {
+                    window.alert("An account with that email or username already exists.");
+                } else {
+                    window.alert("An unknown error occurred. Please try again later.");
+                }
+
             }
             console.log(user)
         },
@@ -90,7 +126,8 @@ const Signup = () => {
 
     const logOut = () => {
         googleLogout();
-        navigate('/signup')
+        localStorage.clear();
+        navigate('/signup');
     };
 
     return (

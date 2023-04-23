@@ -1,8 +1,7 @@
 import React, { useState} from 'react';
 import { googleLogout} from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import useSignup from '../Signup/hooks/useSignup';
-
+import useSignup from '../Authentication/hooks/useSignup';
 
 const Profile = () => {
     

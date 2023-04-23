@@ -1,10 +1,23 @@
-import Google from '../../assets/Google.svg'
-import login from '../../assets/login.svg'
+import Google from '../../../assets/Google.svg'
+import login from '../../../assets/login.svg'
+import useLogin from '../hooks/useLogin';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 const Login = () => {
+
+    const { getData } = useLogin()
+
+    const navigate = useNavigate()
+    
+    function process() {
+        getData();
+        navigate('/dashboard');
+    }
+
     return (
         <div className="flex gap-4 w-full px-4 py-10 justify-center h-full">
-            
+
             {/* IMAGE */}
             <div className='w-full hidden md:flex justify-end '>
                 <img src={login} alt='' />
@@ -19,11 +32,11 @@ const Login = () => {
                         <div className='rounded-md bg-white p-2 drop-shadow-md'>
                             <img src={Google} alt='google' />
                         </div>
-                        <button className='bg-white hover:bg-navblue hover:text-white border-2 border-navblue rounded-full px-12 py-2'>Go Inside! </button>
+                        <button onClick={() => process()} className='bg-white hover:bg-navblue hover:text-white border-2 border-navblue rounded-full px-12 py-2'>Go Inside! </button>
                         <span>Do you need an account? <a href='/signup' className='underline-offset-4 underline font-semibold'>Create new account</a></span>
                     </div>
                 </div>
-            </div>         
+            </div>
 
         </div>
     );

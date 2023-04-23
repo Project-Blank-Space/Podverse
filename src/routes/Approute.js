@@ -3,8 +3,8 @@ import { NoRouteFound } from "./NoRouteFound";
 import PageLayout from "../UI/PageLayout";
 import DashboardLayout from "../UI/DashboardLayout";
 import Home from "../features/Home/home";
-import Signup from "../features/Signup/signup";
-import Login from "../features/Login/login";
+import Signup from '../features/Authentication/Signup/signup'
+import Login from "../features/Authentication/Login/login";
 import Profile from "../features/profile/profile";
 import DashboardHome from "../features/Dashboard/Home/home";
 import Discover from "../features/Dashboard/Discover/discover";
