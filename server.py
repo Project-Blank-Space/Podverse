@@ -106,9 +106,9 @@ def check_user(username):
             user_database = json.load(x)
             
         if username in list(user_database.keys()):
-            return jsonify({'user_exists': 'True'})
+            return jsonify({'user_exists': True})
         else:
-            return jsonify({'user_exists': 'False'})
+            return jsonify({'user_exists': False})
 
 @app.route('/get_data/<username>', methods=['GET'])
 def get_user_data(username):
