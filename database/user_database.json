@@ -1,9 +1,9 @@
 {
-    "username" : {
-        "user_img" : "url_of_user_img",
-        "unique_id" : "Google_unique_id",
-        "user_name" : "name_provided_by_user",
-        "user_email" : "email_provided_by_user",
-        "user_description" : "description_provided_by_user"
+    "username": {
+        "user_img": "url_of_user_img",
+        "unique_id": "Google_unique_id",
+        "user_name": "name_provided_by_user",
+        "user_email": "email_provided_by_user",
+        "user_description": "description_provided_by_user"
     }
 }

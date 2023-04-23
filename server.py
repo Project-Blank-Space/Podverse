@@ -1,7 +1,5 @@
 from flask import Flask,request,jsonify
-import base64
 import json
-
 # import os
 
 import functions
@@ -10,8 +8,6 @@ from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
-
-# model_load("./model.pickle")
 
 
 @app.route('/')
@@ -23,13 +19,13 @@ def create_user(username):
     if request.method == 'POST':
         new_user_data = request.get_json()
         
-        user_img_url = functions.user_image_upload(new_user_data["user_img"], username)
+        # user_img_url = functions.user_image_upload(new_user_data["user_img"], username)
         
         with open('database/user_database.json', "r") as x:
             user_database = json.load(x)
         
         user_database[username] = {
-        "user_img" : user_img_url,
+        "user_img" : new_user_data["user_img"],
         "unique_id" : new_user_data["unique_id"],
         "user_name" : new_user_data["user_name"],
         "user_email" : new_user_data["user_email"],
@@ -122,8 +118,20 @@ def get_user_data(username):
             
         return jsonify({username :user_database[username]})
 
-
-
+@app.route('/<username>/mark_favourite/<channel_name>/<episode_no>', methods=['POST'])
+def mark_favourite(username, channel_name, episode_no):
+    if request.method == 'POST':
+        with open('database/favourite_database.json', "r") as x:
+            favourite_database = json.load(x)
+            
+        favourite_database[username][channel_name] = episode_no
+        
+        with open('database/favourite_database.json', "w") as y:
+            json.dump(favourite_database, y)
+            
+        functions.favourite_database_upload()
+        
+        return jsonify({'favourite_added': 'True'})
 
 
 
