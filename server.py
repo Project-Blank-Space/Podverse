@@ -118,14 +118,22 @@ def get_user_data(username):
             
         return jsonify({username :user_database[username]})
 
-@app.route('/<username>/mark_favourite/<channel_name>/int<episode_no>', methods=['POST'])
+@app.route('/mark_favourite/<username>/<channel_name>/<episode_no>', methods=['POST'])
 def mark_favourite(username, channel_name, episode_no):
     if request.method == 'POST':
         with open('database/favourite_database.json', "r") as x:
             favourite_database = json.load(x)
-            
-        favourite_database[username][channel_name] = episode_no
         
+        try:
+            current_saved_data = favourite_database[username][channel_name]
+            
+            if episode_no in current_saved_data:
+                favourite_database[username][channel_name].remove(episode_no)
+            else:
+                favourite_database[username][channel_name].append(episode_no) # append the number of the current season and append the current season number.
+        except KeyError:
+            favourite_database[username] = {channel_name : [episode_no]}
+
         with open('database/favourite_database.json', "w") as y:
             json.dump(favourite_database, y)
             

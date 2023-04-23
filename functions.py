@@ -28,6 +28,11 @@ s3.download_file(
     Bucket= bucket, Key="database/episode_database.json", Filename="database/episode_database.json"
 )
 
+# TO download favourite_database
+s3.download_file(
+    Bucket= bucket, Key="database/favourite_database.json", Filename="database/favourite_database.json"
+)
+
 def create_presigned_url(bucket_name, object_name, expiration=2592000):
     """Generate a presigned URL to share an S3 object
 
@@ -71,6 +76,13 @@ def episode_database_upload():
         Filename="database/episode_database.json",
         Bucket=bucket,
         Key="database/episode_database.json",
+    )
+    
+def favourite_database_upload():
+    s3.upload_file(
+        Filename="database/favourite_database.json",
+        Bucket=bucket,
+        Key="database/favourite_database.json",
     )
 
 def user_image_upload(user_img_64, username):

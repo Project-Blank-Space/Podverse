@@ -27,6 +27,12 @@ s3.upload_file(
     Key="database/channel_database.json",
 )
 
+s3.upload_file(
+    Filename="database_reset/favourite_database.json",
+    Bucket=bucket,
+    Key="database/favourite_database.json",
+)
+
 # To download user_database    
 s3.download_file(
     Bucket= bucket, Key="database/user_database.json", Filename="database/user_database.json"
@@ -40,4 +46,9 @@ s3.download_file(
 # To download episode_database
 s3.download_file(
     Bucket= bucket, Key="database/episode_database.json", Filename="database/episode_database.json"
+)
+
+# TO download favourite_database
+s3.download_file(
+    Bucket= bucket, Key="database/favourite_database.json", Filename="database/favourite_database.json"
 )
