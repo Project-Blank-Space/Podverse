@@ -9,12 +9,12 @@ for bucket in aws_resources.buckets.all():
     
 s3 = boto3.client('s3')
 
-# s3.upload_file(
-#     Filename="channel_database.json",
-#     Bucket=bucket,
-#     Key="database/channel_database.json",
-# )
+s3.upload_file(
+    Filename="episode_database.json",
+    Bucket=bucket,
+    Key="database/episode_database.json",
+)
 
 s3.download_file(
-    Bucket= bucket, Key="database/channel_database.json", Filename="database/channel_database.json"
+    Bucket= bucket, Key="database/episode_database.json", Filename="database/episode_database.json"
 )

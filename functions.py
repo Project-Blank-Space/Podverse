@@ -1,4 +1,5 @@
 import base64
+from mutagen.mp3 import MP3
 
 import logging
 import boto3
@@ -20,6 +21,11 @@ s3.download_file(
 #To download channel_database
 s3.download_file(
     Bucket= bucket, Key="database/channel_database.json", Filename="database/channel_database.json"
+)
+
+# To download episode_database
+s3.download_file(
+    Bucket= bucket, Key="database/episode_database.json", Filename="database/episode_database.json"
 )
 
 def create_presigned_url(bucket_name, object_name, expiration=2592000):
@@ -59,6 +65,13 @@ def channel_database_upload():
         Bucket=bucket,
         Key="database/channel_database.json",
     )
+    
+def episode_database_upload():
+    s3.upload_file(
+        Filename="database/episode_database.json",
+        Bucket=bucket,
+        Key="database/episode_database.json",
+    )
 
 def user_image_upload(user_img_64, username):
     
@@ -95,3 +108,25 @@ def channel_image_upload(channel_img_64, username):
         return channel_img_url
     else:
         return "Error channel_image_upload"
+    
+def podcast_data_upload(audio_64, username, channel_name, episode_no):
+    
+    decode = open('PODCAST_DATA.mp3', 'wb')
+    decode.write(base64.b64decode(audio_64))
+    
+    s3.upload_file(
+        Filename="PODCAST_DATA.mp3",
+        Bucket=bucket,
+        Key = "audio/" + username + "/" + channel_name + "/" + episode_no + ".mp3"
+    )
+    
+    audio_url = create_presigned_url(bucket, "audio/" + username + "/" + channel_name + "/" + episode_no + ".mp3")
+    
+    if audio_url is not None:
+        return audio_url
+    else:
+        return "Error channel_audio_upload"
+    
+def data_time(file_name):
+    audio = MP3(file_name)
+    return audio.info.length 

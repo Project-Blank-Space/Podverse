@@ -28,7 +28,7 @@ def create_user(username):
         with open('database/user_database.json', "r") as x:
             user_database = json.load(x)
         
-        user_database['username'] = {
+        user_database[username] = {
         "user_img" : user_img_url,
         "unique_id" : new_user_data["unique_id"],
         "user_name" : new_user_data["user_name"],
@@ -53,7 +53,7 @@ def create(username):
         with open('database/channel_database.json', "r") as x:
             channel_database = json.load(x)
             
-        channel_database['username'] = {
+        channel_database[username] = {
         "channel_image" : channel_image_url,
         "channel_Name" : new_channel_data["channel_name"],
         "channel_description" : new_channel_data["channel_description"]
@@ -80,7 +80,30 @@ def check_channel(username):
 @app.route('/<username>/<channel_name>/upload', methods=['POST'])
 def upload_file(username, channel_name):
     if request.method == 'POST':
-        return 0
+        uploaded_data = request.get_json()
+        
+        with open('database/episode_database.json', "r") as x:
+            episode_database = json.load(x)
+            
+        episode_no = str(len(episode_database[channel_name].values()))
+        
+        podcast_data_url = functions.podcast_data_upload(uploaded_data["file"], username, channel_name, episode_no)
+            
+        episode_database[channel_name][episode_no] = {
+            "episode_url" : podcast_data_url,
+            "episode_title" : uploaded_data["episode_name"],
+            "episode_description" : uploaded_data["episode_description"],
+            "episode_time" : str(functions.data_time("PODCAST_DATA.mp3"))
+        }
+        
+        with open('database/episode_database.json', "w") as y:
+            json.dump(episode_database, y)
+            
+        functions.episode_database_upload()    # upload the database of the channel.
+        
+        return jsonify({'episode_uploaded': 'True'})
+    
+
 
 
 
