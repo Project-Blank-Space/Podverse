@@ -1,9 +1,23 @@
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FiLogOut, FiSettings } from 'react-icons/fi';
+import { LocalStorageItems } from "../shared/localstorageitems";
+import { googleLogout } from '@react-oauth/google';
 
 
 const Sidebar = () => {
+
+  const User = JSON.parse(localStorage.getItem(LocalStorageItems.user_data));
+  // console.log(User)
+
+  const navigate = useNavigate()
+
+
+  const logOut = () => {
+    // googleLogout();
+    localStorage.removeItem(LocalStorageItems.user_data);
+    navigate('/');
+  };
 
   const routeLinks1 = [
     {
@@ -34,7 +48,7 @@ const Sidebar = () => {
 
   const routeLinks2 = [
     {
-      icon: <FiSettings/>,
+      icon: <FiSettings />,
       display: "Settings",
       to: "/settings",
     },
@@ -61,35 +75,49 @@ const Sidebar = () => {
     <div className="left-0 inset-0 top-24 bg-[#F1F1F1] z-30 sticky h-auto overflow-y-visible border-b-0 border-0 w-48">
       <div className="w-full px-3 py-10 overflow-y-auto h-auto block sticky bg-[#F1F1F1]">
         <div className="flex items-center gap-4 pb-12">
-          <div className="rounded-full w-12 h-12 text-transparent bg-navblue">.</div>
-          <span className="text-lg">Pranjal</span>
+          <div className="rounded-full w-12 h-12 text-transparent bg-navblue">
+            <img className="rounded-full" src={User.user_img} />
+          </div>
+          <span className="text-sm whitespace-nowrap">{User.user_name}</span>
         </div>
-        <ul className="space-y-2 w-full">
-          {routeLinks1.map((routeItem, index) => {
-            return (
-              <li>
-                <NavLink
-                  key={index}
-                  to={routeItem.to}
-                  className={({ isActive }) =>
-                    isActive
-                      ? "border-2 border-solid border-navblue bg-navblue text-white text-center block m-2 p-2 rounded-md font-semibold text-xs whitespace-nowrap"
-                      : "border-2 border-solid border-navblue block m-2 p-2 text-center font-semibold rounded-md text-xs whitespace-nowrap"
-                  }
-                >
-                  <span>{routeItem.display}</span>
-                </NavLink>
-              </li>
-            );
-          })}
-          <ul className="space-y-4">
-            {routeLinks2.map((routeItem, index) => {
+        <div className="flex flex-col gap-60">
+          <ul className="space-y-2 w-full">
+            {routeLinks1.map((routeItem, index) => {
+              return (
+                <li>
+                  <NavLink
+                    key={index}
+                    to={routeItem.to}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "border-2 border-solid border-navblue bg-navblue text-white text-center block m-2 p-2 rounded-md font-semibold text-xs whitespace-nowrap"
+                        : "border-2 border-solid border-navblue block m-2 p-2 text-center font-semibold rounded-md text-xs whitespace-nowrap"
+                    }
+                  >
+                    <span>{routeItem.display}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
+          </ul>
+          <ul className="space-y-5">
+            <button className="flex gap-6 px-6 items-center text-sm whitespace-nowrap" onClick={() => navigate('/settings')}>
+              <FiSettings />
+              <span>Settings</span>
+            </button>
+            <button className="flex gap-6 px-6 items-center text-sm whitespace-nowrap" onClick={() => logOut()}>
+              <FiLogOut />
+              <span>Logout</span>
+            </button>
+
+            {/* {routeLinks2.map((routeItem, index) => {
               return (
                 <li key={index}>
                   <NavLink
                     key={index}
                     to={routeItem.to}
-                    className={`flex gap-4 px-2 items-center text-sm whitespace-nowrap ${activeLink === routeItem.to ? 'border-blue-400 border-x-[3px] text-white' : 'text-'
+                    // onClick={() => routeItem.click}
+                    className={`flex gap-6 px-6 items-center text-sm whitespace-nowrap ${activeLink === routeItem.to ? 'border-blue-400 border-x-[3px] text-white' : 'text-'
                       }`}
                     exact
                   >
@@ -101,11 +129,13 @@ const Sidebar = () => {
                   </NavLink>
                 </li>
               );
-            })}
+            })} */}
           </ul>
-        </ul>
+        </div>
+
       </div>
     </div>
+
   );
 };
 

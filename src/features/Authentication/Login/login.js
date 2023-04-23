@@ -12,7 +12,9 @@ const Login = () => {
     
     function process() {
         getData();
-        navigate('/dashboard');
+        setTimeout(() => {
+            navigate('/dashboard');
+        }, 1000);
     }
 
     return (

@@ -1,16 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { useGoogleLogin, googleLogout } from '@react-oauth/google';
+import React, { useState} from 'react';
+import { useGoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
 import Google from '../../../assets/Google.svg'
 import signup from '../../../assets/signup.svg'
 import { useNavigate } from 'react-router-dom';
 import { LocalStorageItems } from '../../../shared/localstorageitems';
+import useLogin from '../hooks/useLogin';
 
 
 const Signup = () => {
 
     const [user, setUser] = useState([]);
     const [profile, setProfile] = useState([]);
+
+    const navigate = useNavigate()
+
+    const { getData } = useLogin()
+    
+    function process() {
+        getData();
+        setTimeout(() => {
+            navigate('/dashboard');
+        }, 1000);
+
+    }
 
     const baseUrl = "http://127.0.0.1:5000";
 
@@ -24,6 +37,7 @@ const Signup = () => {
             console.log(response.status)
             if (response.status) {
                 localStorage.setItem(LocalStorageItems.user_id, JSON.stringify(profile.id));
+                process();
             } else {
                 console.log("error")
             }
@@ -72,8 +86,6 @@ const Signup = () => {
 
     // }, [user]);
 
-    const navigate = useNavigate()
-
     const login = useGoogleLogin({
         onSuccess: (codeResponse) => {
             console.log(codeResponse)
@@ -90,7 +102,7 @@ const Signup = () => {
                             checkData(res.data).then((check) => {
                                 console.log(check);
                                 if (check == true) {
-                                    navigate('/dashboard')
+                                    process()
                                 }
                                 else {
                                     setProfile(res.data);
@@ -124,11 +136,11 @@ const Signup = () => {
         onError: (error) => console.log('Login Failed:', error)
     });
 
-    const logOut = () => {
-        googleLogout();
-        localStorage.clear();
-        navigate('/signup');
-    };
+    // const logOut = () => {
+    //     googleLogout();
+    //     localStorage.removeItem(LocalStorageItems.user_data);
+    //     navigate('/signup');
+    // };
 
     return (
         <div className="flex gap-4 w-full px-4 py-10 justify-center h-full">
@@ -147,7 +159,7 @@ const Signup = () => {
                         >
                             Sign Up
                         </button>
-                        <button onClick={logOut}>Log out</button>
+                        {/* <button onClick={logOut}>Log out</button> */}
                         <span>Do you already have an account? <a href='/login' className='underline-offset-4 underline font-semibold'>Log in</a></span>
                     </div>
                 </div>

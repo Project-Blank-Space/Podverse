@@ -18,6 +18,7 @@ const useLogin = () => {
             const response = await axios.get(url, {
                 headers: headers,
             });
+            localStorage.setItem(LocalStorageItems.user_data, JSON.stringify(response.data[userid]));
             console.log(response.data);
             return response.data;
         } catch (e) {
