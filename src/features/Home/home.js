@@ -12,7 +12,6 @@ const Home = () => {
                             <button className='bg-white rounded-full py-2 px-5 text-sm w-fit font-medium'>Start Listening for free</button>
                         </div>
                     </div>
-
                 </div>
                 <div className='flex w-full pl-24'>
                     <img className='w-80 md:w-80' src={Microphone} alt='microphone' />

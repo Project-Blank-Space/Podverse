@@ -4,14 +4,17 @@ import { BrowserRouter as Router } from "react-router-dom";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Router>
+  <GoogleOAuthProvider clientId='699628481187-np8ttkfudojv0indq5fvc49lsd1bf5d2.apps.googleusercontent.com'>
+    <React.StrictMode>
+      <Router>
         <App />
-    </Router>
-  </React.StrictMode>
+      </Router>
+    </React.StrictMode>
+  </GoogleOAuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
