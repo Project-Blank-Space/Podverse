@@ -77,6 +77,10 @@ def check_channel(username):
         else:
             return jsonify({'channel_exists': 'False'})   
 
+@app.route('/<username>/<channel_name>/upload', methods=['POST'])
+def upload_file(username, channel_name):
+    if request.method == 'POST':
+        return 0
 
 
 
@@ -87,10 +91,9 @@ def check_channel(username):
 
 
 
-
-# @app.route('/<username>/home')
-# def user_home(username):
-#     return 0
+@app.route('/<username>/home')
+def user_home(username):
+    return 0
 
  
     
@@ -99,32 +102,32 @@ def check_channel(username):
     
 
 
-# @app.route('/<channel_name>/upload', methods=['POST'])
-# def upload(channel_name):
-#     if request.method == 'POST':
+@app.route('/<channel_name>/upload', methods=['POST'])
+def upload(channel_name):
+    if request.method == 'POST':
         
-#         img_base64 = request.get_json()
+        img_base64 = request.get_json()
         
-#         decode = open('IMAGE.png', 'wb')
-#         decode.write(base64.b64decode(img_base64['png']))
+        decode = open('IMAGE.png', 'wb')
+        decode.write(base64.b64decode(img_base64['png']))
         
-#         # file_base64 = request.get_json()
+        # file_base64 = request.get_json()
         
-#         # print(file_base64)
+        # print(file_base64)
         
-#         # encoded_file = 'data:application/pdf;base64,' + file_base64['png']
-#         # print(file_base64)
+        # encoded_file = 'data:application/pdf;base64,' + file_base64['png']
+        # print(file_base64)
         
-#         # encoded_file_utf = encoded_file.encode('utf-8')
-#         # print(encoded_file_utf)            # encoded_file_utf is now a bytes-object with the encoded data. Use bytes.decode()
+        # encoded_file_utf = encoded_file.encode('utf-8')
+        # print(encoded_file_utf)            # encoded_file_utf is now a bytes-object with the encoded data. Use bytes.decode()
         
-#         # file = base64.b64decode(file_base64['png']) # encoded_file_utf is now a bytes-object with the encoded data. Use bytes.decode()
-#         s3.upload_file(
-#             Filename="IMAGE.png",
-#             Bucket=bucket,
-#             Key="new.jpg",
-#         )
-#         return 0   
+        # file = base64.b64decode(file_base64['png']) # encoded_file_utf is now a bytes-object with the encoded data. Use bytes.decode()
+        s3.upload_file(
+            Filename="IMAGE.png",
+            Bucket=bucket,
+            Key="new.jpg",
+        )
+        return 0   
         
         
         
