@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { FiLogOut, FiSettings } from 'react-icons/fi';
+import { FiLogOut} from 'react-icons/fi';
+import {IoMdAddCircle} from 'react-icons/io'
 import { LocalStorageItems } from "../shared/localstorageitems";
 import { googleLogout } from '@react-oauth/google';
 
@@ -46,30 +47,6 @@ const Sidebar = () => {
     }
   ];
 
-  const routeLinks2 = [
-    {
-      icon: <FiSettings />,
-      display: "Settings",
-      to: "/settings",
-    },
-    {
-      icon: <FiLogOut />,
-      display: "Sign out",
-      to: "/",
-    },
-  ];
-
-
-
-
-  const location = useLocation();
-  const [activeLink, setActiveLink] = useState('');
-
-  useEffect(() => {
-    const currentPath = location.pathname;
-    setActiveLink(currentPath);
-  }, [location]);
-
 
   return (
     <div className="left-0 inset-0 top-24 bg-[#F1F1F1] z-30 sticky h-auto overflow-y-visible border-b-0 border-0 w-48">
@@ -101,12 +78,12 @@ const Sidebar = () => {
             })}
           </ul>
           <ul className="space-y-5">
-            <button className="flex gap-6 px-6 items-center text-sm whitespace-nowrap" onClick={() => navigate('/settings')}>
-              <FiSettings />
-              <span>Settings</span>
+            <button className="flex gap-4 px-4 items-center text-sm whitespace-nowrap" onClick={() => navigate('/create-channel')}>
+              <IoMdAddCircle size={20} />
+              <span>Create channel</span>
             </button>
-            <button className="flex gap-6 px-6 items-center text-sm whitespace-nowrap" onClick={() => logOut()}>
-              <FiLogOut />
+            <button className="flex gap-4 px-4 items-center text-sm whitespace-nowrap" onClick={() => logOut()}>
+              <FiLogOut size={20} />
               <span>Logout</span>
             </button>
 

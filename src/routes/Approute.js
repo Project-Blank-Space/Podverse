@@ -8,6 +8,7 @@ import Login from "../features/Authentication/Login/login";
 import Profile from "../features/profile/profile";
 import DashboardHome from "../features/Dashboard/Home/home";
 import Discover from "../features/Dashboard/Discover/discover";
+import Create_Channel from "../features/Dashboard/Channel/Create_channel";
 
 
 const AppRoute = () => {
@@ -57,6 +58,14 @@ const AppRoute = () => {
                 <>
                     <DashboardLayout>
                         <Discover />
+                    </DashboardLayout>
+                </>
+            }
+            />
+            <Route path="/create-channel" element={
+                <>
+                    <DashboardLayout>
+                        <Create_Channel />
                     </DashboardLayout>
                 </>
             }
