@@ -1,0 +1,16 @@
+{
+    "username": {
+        "user_img": "url_of_user_img",
+        "unique_id": "Google_unique_id",
+        "user_name": "name_provided_by_user",
+        "user_email": "email_provided_by_user",
+        "user_description": "description_provided_by_user"
+    },
+    "111946892247427516082": {
+        "user_img": "https://lh3.googleusercontent.com/a/AGNmyxbkV9Sy0DTw8R0bmIumjssh-0V84AfunO4UfD35=s96-c",
+        "unique_id": "111946892247427516082",
+        "user_name": "Abhishek Yadav",
+        "user_email": "ayabcd123@gmail.com",
+        "user_description": true
+    }
+}

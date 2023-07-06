@@ -1,0 +1,5 @@
+{
+    "channel_image" : "Image of the channel in base64_data format",
+    "channel_name" : "name_provided_by_user_for_channel",
+    "channel_description" : "description_provided_by_user_for_channel"
+}
