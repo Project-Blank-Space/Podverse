@@ -12,6 +12,8 @@ const useLogin = () => {
     const baseUrl = "http://127.0.0.1:5000";
 
     const getData = async () => {
+        
+        const userid =   JSON.parse(localStorage.getItem(LocalStorageItems.user_id));
         const url = `${baseUrl}/get_data/${userid}`;
         const headers = { "content-type": "application/json" };
         try {

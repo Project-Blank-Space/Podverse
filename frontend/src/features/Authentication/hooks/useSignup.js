@@ -1,56 +1,117 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { GET, POST } from "../../../utils";
+import { set_user , set_loading} from "../slices/useauthslice";
+import { LocalStorageItems } from "../../../shared/localstorageitems";
+import { useNavigate } from "react-router-dom";
+import useLogin from "./useLogin";
 
-const useSignup = () => {
+const UseSignup = () => {
 
-    const [user, setUser] = useState([]);
-    const [profile, setProfile] = useState([]);
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { user } = useSelector(
+        (store) => store.auth
+    );
 
-    // useEffect(() => {
-    //     if (user) {
-    //         axios
-    //             .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-    //                 headers: {
-    //                     Authorization: `Bearer ${user.access_token}`,
-    //                     Accept: 'application/json'
-    //                 }
-    //             })
-    //             .then((res) => {
-    //                 setProfile(res.data);
-    //                 console.log(profile)
-    //             })
-    //             .catch((err) => console.log(err));
-    //     }
-    // }, [user]);
+    useEffect(() => {
+        if (user) {
+            const maindatalink = async (loginBody) => {
+                console.log(user)
+                const loginUrl = `${baseUrl}/create_user/${user.unique_id}`;
+                const headers = { "content-type": "application/json" };
+                try {
+                    const response = await axios.post(loginUrl, loginBody, {
+                        headers: headers,
+                    });
+                    console.log(response.status)
+                    if (response.status) {
+                        localStorage.setItem(LocalStorageItems.user_id, JSON.stringify(user.unique_id));
+                        process();
+                    } else {
+                        console.log("error")
+                    }
+                    return response.status;
+                } catch (e) {
+                    throw new Error(e);
+                }
+            };
 
-    const sign = () => {
-        console.log(user);
-        setUser({ access_token: "123456789" });
-    };
+            maindatalink(user);
+        }
 
-    const baseUrl = "https://localhost:5000";
-    const putdata = async (loginBody) => {
-        const loginUrl = `${baseUrl}/create_user/${user.access_token}`;
+
+    }, [user]);
+
+    const { getData } = useLogin()
+
+    function process() {
+        getData();
+        setTimeout(() => {
+            set_loading(false)
+            navigate('/dashboard');
+        }, 1000);
+
+    }
+
+    const baseUrl = "http://127.0.0.1:5000";
+
+
+    const checkData = async (data) => {
+        const url = `${baseUrl}/check_user/${data.sub}`;
         const headers = { "content-type": "application/json" };
         try {
-            const response = await axios.post(loginUrl, loginBody, {
+            const response = await axios.get(url, {
                 headers: headers,
             });
-            console.log(response.data.status)
-            return response.data.status;
+            console.log(response.data.user_exists);
+            return response.data.user_exists;
         } catch (e) {
             throw new Error(e);
         }
     };
 
-    return {
-        user,
-        setUser,
-        profile,
-        setProfile,
-        sign,
-        putdata,
-    };
-};
 
-export default useSignup;
+    const create_user = (data) => {
+        console.log(data)
+        dispatch(set_loading(true))
+        checkData(data)
+            .then((check) => {
+                console.log(check)
+                if (check === 'true') {
+                    process()
+                }
+                else {
+                    const payload = {
+                        user_img: data.picture,
+                        unique_id: data.sub,
+                        user_name: data.name,
+                        user_email: data.email,
+                        user_description: data.email_verified,
+                    };
+                    console.log(payload)
+                    dispatch(set_user(payload))
+                    console.log(user)
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        // try {
+        //     const res = await GET({
+        //         url: ``,
+        //     });
+        //     dispatch(set_user(res.payload.data));
+        // } catch (error) {
+        //     console.log(error);
+        // }
+    };
+
+    return {
+        create_user
+    };
+
+}
+
+export default UseSignup;

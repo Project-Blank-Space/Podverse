@@ -17,7 +17,8 @@ const Sidebar = () => {
   const logOut = () => {
     // googleLogout();
     localStorage.removeItem(LocalStorageItems.user_data);
-    navigate('/');
+    navigate('/')
+    window.location.reload('/')
   };
 
   const routeLinks1 = [
@@ -61,7 +62,7 @@ const Sidebar = () => {
           <ul className="space-y-2 w-full">
             {routeLinks1.map((routeItem, index) => {
               return (
-                <li>
+                <li key={index}>
                   <NavLink
                     key={index}
                     to={routeItem.to}
